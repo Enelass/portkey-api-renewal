@@ -1,0 +1,43 @@
+[project]
+name = "portkey-renew-api-key"
+version = "1.0.0"
+description = "Portkey API Key Updater"
+authors = [
+    {name = "Florian Bidabe", email = "florian@photonsec.com.au"}
+]
+readme = "README.md"
+requires-python = ">=3.8,<3.13"
+license = { text = "MIT" }
+dependencies = [
+    "browser_cookie3>=0.20.1",
+    "requests>=2.25.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.scripts]
+portkey-check = "portkey_key_updater.check_key:main"
+portkey-renew = "portkey_key_updater.renew_key:main"
+portkey-get-bearer = "portkey_key_updater.get_bearer:main"
+check-key = "portkey_key_updater.check_key:main"
+renew-key = "portkey_key_updater.renew_key:main"
+get-bearer = "portkey_key_updater.get_bearer:main"
+analyse-env = "portkey_key_updater.analyse_env:main"
+update-secretmgr = "portkey_key_updater.update_secretmgr:main"
+generate-report = "portkey_key_updater.report:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/portkey_key_updater"]

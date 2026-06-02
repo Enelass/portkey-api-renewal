@@ -1,0 +1,109 @@
+
+# Security reports and recommendations
+security_recommendations.html
+
+# Generated output
+logs/*
+!logs/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+
+# Configuration files containing sensitive information
+config/config.json
+
+
+# Background stdout stderr
+nohup.out
+
+# Agentic AI specific
+.roo/
+.cline/
+.claude/
+.gemini/
+.codex/
+.opencode/
+CLAUDE.md
+GEMINI.md
+AGENTS.md
+ToDo NextAction.txt
+
+# macOS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python specific
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+dontsync/
+.venv/
+.venv-smoke/
+.venv-smoke312/
+venv/
+venv.bak/
+uv.lock
+
+# Test/cache artifacts
+.pytest_cache/
+
+# IDE specific files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.vscode/.ropeproject
+.idea/
+*.swp
+*.swo
+*~
+VSCode_specific/
+
+# Backup files
+*.backup.*
+*.bak
+
+# Browser cookie extraction temporary files
+cookies_temp/
+browser_data/
+*.webloc
+
+
+# Test files
+test_*.env
+test_hardcoded.*
+
+# Credentials and secrets
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets.txt
+credentials.json

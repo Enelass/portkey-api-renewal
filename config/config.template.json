@@ -1,0 +1,53 @@
+{
+  "oauth": {
+    "base_url": "https://your-portkey-domain.com",
+    "workspace_id": "your-workspace-id",
+    "organisation_id": "your-organisation-id",
+    "list_api_keys_endpoint": "/albus/v2/api-keys",
+    "create_api_key_endpoint": "/albus/v2/api-keys/workspace/user",
+    "key_name": "Portkey API Key",
+    "key_description": "",
+    "key_type": "workspace",
+    "expires_at": null,
+    "rotation_policy": null,
+    "scopes": [
+      "mcp.invoke",
+      "policies.list",
+      "mcp_servers.list",
+      "providers.list",
+      "workspaces.list",
+      "logs.export",
+      "logs.list",
+      "logs.view",
+      "analytics.view",
+      "prompts.render",
+      "configs.read",
+      "configs.list",
+      "virtual_keys.duplicate",
+      "virtual_keys.read",
+      "virtual_keys.list",
+      "virtual_keys.copy",
+      "workspace_users.read",
+      "workspace_users.list",
+      "completions.write",
+      "logs.write",
+      "guardrails.invoke",
+      "agents.invoke"
+    ],
+    "defaults": {
+      "config_id": null,
+      "metadata": null
+    }
+  },
+  "headers": {
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "accept_language": "en-US,en;q=0.9",
+    "accept_encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "content_type": "application/json"
+  },
+  "timeouts": {
+    "api_request": 10
+  }
+}
