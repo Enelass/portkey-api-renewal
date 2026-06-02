@@ -7,7 +7,7 @@ import subprocess
 import sys
 from contextlib import redirect_stderr
 
-from .get_bearer import get_browser_cookies_for_domain
+from .get_bearer import extract_bearer_token_from_cookies, get_browser_cookies_for_domain
 from .logger import log_end, log_error, log_info, log_start, log_success
 from .portkey_api import describe_key, list_api_keys, select_latest_active_key
 from .renew_key import copy_to_clipboard, request_api_key_with_token
@@ -130,6 +130,10 @@ def _extract_session_token_and_cookies(config):
         log_error("Could not detect default browser")
         sys.exit(1)
 
+    colored_print(
+        f"[INFO] Default browser: {browser_info['name']} ({browser_info['bundle_id']})",
+        Colors.CYAN,
+    )
     log_info(f"Default browser: {browser_info['name']}", "utils.py")
     domain = config["oauth"]["base_url"].replace("https://", "").replace("http://", "").split("/")[0]
     colored_print(f"[INFO] Attempting to extract cookies for domain: {domain}", Colors.CYAN)
@@ -144,24 +148,22 @@ def _extract_session_token_and_cookies(config):
         colored_print("[INFO] Please make sure you're logged in to Portkey in your browser", Colors.YELLOW)
         sys.exit(1)
 
-    token_value = None
-    for name, cookie_data in cookies.items():
-        if name == "token" and cookie_data["value"]:
-            token_value = cookie_data["value"]
-            break
+    colored_print(f"[INFO] Found cookies: {', '.join(sorted(cookies))}", Colors.CYAN)
+    token_value, token_cookie_name = extract_bearer_token_from_cookies(cookies)
 
     if not token_value:
         colored_print("[ERROR] No bearer token found in cookies", Colors.RED)
         log_error("No bearer token found in cookies")
+        colored_print("[INFO] Expected one of: token, auth_token, access_token, id_token", Colors.YELLOW)
         colored_print("[INFO] Please make sure you're logged in and authenticated", Colors.YELLOW)
         sys.exit(1)
 
     timestamp_print(
-        f"[SUCCESS] Found bearer token in {browser_info.get('name', 'browser')}: {obfuscate_key(token_value)}",
+        f"[SUCCESS] Found bearer token in {browser_info.get('name', 'browser')} cookie '{token_cookie_name}': {obfuscate_key(token_value)}",
         Colors.GREEN,
     )
     log_success(
-        f"Found bearer token in {browser_info.get('name', 'browser')}: {obfuscate_key(token_value)}",
+        f"Found bearer token in {browser_info.get('name', 'browser')} cookie '{token_cookie_name}': {obfuscate_key(token_value)}",
         "get_bearer.py",
     )
     return token_value, cookies

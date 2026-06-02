@@ -17,6 +17,21 @@ from .logger import log_success, log_warning, log_error, log_info, log_start, lo
 from .utils import Colors, colored_print, load_config, get_browser_info
 from .portkey_api import list_api_keys
 
+TOKEN_COOKIE_CANDIDATES = ("token", "auth_token", "access_token", "id_token")
+
+
+def extract_bearer_token_from_cookies(cookies):
+    """Return the bearer token value from known Portkey session cookie names."""
+    for cookie_name in TOKEN_COOKIE_CANDIDATES:
+        cookie_data = cookies.get(cookie_name)
+        if cookie_data and cookie_data.get("value"):
+            value = cookie_data["value"]
+            if value.lower().startswith("bearer "):
+                value = value.split(None, 1)[1]
+            return value, cookie_name
+    return None, None
+
+
 def get_browser_cookies_for_domain(browser_id, domain):
     """Extract cookies from the default browser using browser-cookie3 with fallbacks"""
     
@@ -103,20 +118,13 @@ def obfuscate_token(token):
 
 def test_api_key_with_cookies(cookies, config):
     """Test that the extracted bearer token can list Portkey API keys."""
-    # Look for token cookies
-    token_value = None
-    oauth_id_token_value = None
-    
-    for name, cookie_data in cookies.items():
-        if name == 'token' and cookie_data['value']:
-            token_value = cookie_data['value']
-            print(f" Found bearer token: {obfuscate_token(token_value)}", file=sys.stderr)
-    
-    final_token = token_value or oauth_id_token_value
+    final_token, cookie_name = extract_bearer_token_from_cookies(cookies)
     if not final_token:
-        colored_print("[ERROR] No bearer token cookies found", Colors.RED)
-        log_error("No bearer token cookies found")
+        colored_print("[ERROR] No bearer token cookie found", Colors.RED)
+        log_error("No bearer token cookie found")
         return False
+
+    print(f" Found bearer token in cookie '{cookie_name}': {obfuscate_token(final_token)}", file=sys.stderr)
     
     try:
         print(" Testing bearer token with Portkey key list request", file=sys.stderr)
@@ -211,15 +219,10 @@ def get_bearer_token():
         if not cookies:
             return {'success': False, 'error': 'No cookies found in browser session'}
         
-        # Look for token cookies
-        token_value = None
-        for name, cookie_data in cookies.items():
-            if name == 'token' and cookie_data['value']:
-                token_value = cookie_data['value']
-                break
+        token_value, _ = extract_bearer_token_from_cookies(cookies)
         
         if not token_value:
-            return {'success': False, 'error': 'No bearer token cookies found'}
+            return {'success': False, 'error': 'No bearer token cookie found'}
         
         # Return cookies in the original format for compatibility with check_key.py
         return {
@@ -304,11 +307,7 @@ Examples:
         sys.exit(1)
 
     # Extract the token value to save to keychain
-    token_value = None
-    for name, cookie_data in cookies.items():
-        if name == 'token' and cookie_data['value']:
-            token_value = cookie_data['value']
-            break
+    token_value, _ = extract_bearer_token_from_cookies(cookies)
 
     if token_value:
         # Save bearer token to macOS keychain as STUDIO_TOKEN
