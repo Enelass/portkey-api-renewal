@@ -51,9 +51,6 @@ The active key is stored in Keychain as `PORTKEY_API_KEY`. Add shell exports as 
 
 ```bash
 export PORTKEY_API_KEY=$(security find-generic-password -s "PORTKEY_API_KEY" -w)
-export OPENAI_API_KEY="$PORTKEY_API_KEY"
-export ANTHROPIC_AUTH_TOKEN="$PORTKEY_API_KEY"
-export GEMINI_API_KEY="$PORTKEY_API_KEY"
 ```
 
 ## Commands
