@@ -11,8 +11,8 @@ Automate Portkey API key renewal on macOS. The tool reads your authenticated Por
 ### 1. Install
 
 ```bash
-git clone https://github.com/Enelass/portkey-key-updater.git
-cd portkey-key-updater
+git clone https://github.com/Enelass/portkey-api-renewal.git
+cd portkey-api-renewal
 uv venv && source .venv/bin/activate
 uv pip install -e .
 ```

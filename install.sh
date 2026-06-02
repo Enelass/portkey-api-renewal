@@ -57,8 +57,8 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Configuration
-INSTALL_DIR="$HOME/Applications/Portkey-key-updater"
-GITHUB_ZIP_URL="https://github.com/Enelass/portkey-key-updater/archive/refs/heads/main.zip"
+INSTALL_DIR="$HOME/Applications/Portkey-API-renewal"
+GITHUB_ZIP_URL="https://github.com/Enelass/portkey-api-renewal/archive/refs/heads/main.zip"
 REQUIRED_FILES=("pyproject.toml" "src/portkey_key_updater/check_key.py" "src/portkey_key_updater/get_bearer.py" "src/portkey_key_updater/renew_key.py" "src/portkey_key_updater/utils.py")
 
 # Functions
@@ -122,7 +122,7 @@ download_and_extract() {
     
     # Create temporary directory for download
     local temp_dir=$(mktemp -d)
-    local zip_file="$temp_dir/portkey-key-updater.zip"
+    local zip_file="$temp_dir/portkey-api-renewal.zip"
     
     print_info "Downloading to $temp_dir"
     
@@ -146,7 +146,7 @@ download_and_extract() {
     fi
     
     # Find the extracted directory (usually has -main suffix)
-    local extracted_dir=$(find "$temp_dir" -type d -name "*portkey-key-updater*" | head -1)
+    local extracted_dir=$(find "$temp_dir" -type d -name "*portkey-api-renewal*" | head -1)
     
     if [[ -z "$extracted_dir" ]]; then
         print_error "Could not find extracted directory"
