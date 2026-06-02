@@ -6,7 +6,8 @@ The format is based on Keep a Changelog, and this project uses Semantic Versioni
 
 ## [Unreleased]
 
-- No unreleased changes yet.
+- Added README platform/version badges for macOS, zsh, Python, Portkey, checks, and releases.
+- Added GitHub Actions workflows for changelog validation and tag-based GitHub releases.
 
 ## [1.0.0] - 2026-03-24
 

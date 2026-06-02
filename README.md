@@ -1,5 +1,12 @@
 # Portkey API Key Updater
 
+[![macOS](https://img.shields.io/badge/macOS-Tested-green?style=flat-square)](https://www.apple.com/macos/)
+[![zsh](https://img.shields.io/badge/zsh-Tested-blue?style=flat-square)](https://www.zsh.org/)
+[![Python](https://img.shields.io/badge/Python-3.8--3.12-orange?style=flat-square)](https://www.python.org/)
+[![Portkey](https://img.shields.io/badge/Portkey-Gateway-purple?style=flat-square)](https://portkey.ai/)
+[![Tests](https://img.shields.io/github/actions/workflow/status/Enelass/portkey-api-renewal/changelog.yml?branch=main&label=checks&style=flat-square)](https://github.com/Enelass/portkey-api-renewal/actions/workflows/changelog.yml)
+[![Release](https://img.shields.io/github/v/release/Enelass/portkey-api-renewal?style=flat-square)](https://github.com/Enelass/portkey-api-renewal/releases)
+
 <p align="center">
   <img src="assets/Portkey_API_Logo.png" alt="Portkey API Key Updater Logo" width="160" />
 </p>
