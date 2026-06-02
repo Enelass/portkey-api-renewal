@@ -66,6 +66,30 @@ def update_keychain(api_key):
         print(f"⚠️  Keychain sync error: {keychain_error}", file=sys.stderr)
 
 
+def open_browser(url):
+    """Open a URL in the default macOS browser."""
+    return subprocess.run(["open", url], check=False)
+
+
+def handle_expired_jwt(config):
+    """Open Portkey in the browser and explain how to refresh the session."""
+    base_url = config["oauth"]["base_url"]
+    try:
+        open_browser(base_url)
+        colored_print("[AUTH] Your Portkey browser session token has expired.", Colors.YELLOW)
+        colored_print(
+            "[AUTH] I opened the Portkey sign-in page. Please authenticate in the browser, wait about 30 seconds for cookies to refresh, then run this command again.",
+            Colors.YELLOW,
+        )
+    except Exception as exc:
+        colored_print("[AUTH] Your Portkey browser session token has expired.", Colors.YELLOW)
+        colored_print(
+            f"[AUTH] Please open {base_url}, authenticate, wait about 30 seconds for cookies to refresh, then run this command again.",
+            Colors.YELLOW,
+        )
+        log_error(f"Could not open browser for expired JWT re-authentication: {exc}")
+
+
 def check_current_api_key(final_token, cookies, return_key=False):
     """Return the newest active unexpired Portkey API key, creating one if needed."""
     config = load_config()
@@ -85,6 +109,8 @@ def check_current_api_key(final_token, cookies, return_key=False):
         return False
 
     if not success:
+        if error and "jwt expired" in error.lower():
+            handle_expired_jwt(config)
         print(f"❌ Portkey API key list failed: {error}", file=sys.stderr)
         if return_key:
             return False, None
