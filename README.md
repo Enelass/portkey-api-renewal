@@ -76,6 +76,17 @@ Legacy aliases `check-key`, `renew-key`, and `get-bearer` remain available.
 
 Portkey can keep multiple keys active. This tool always lists keys from `/albus/v2/api-keys?workspace_id=...`, ignores inactive or expired keys, and selects the active unexpired key with the newest `created_at`. If none exists, it creates a new key through `/albus/v2/api-keys/workspace/user`.
 
+## Security Report
+
+`portkey-check` runs a console environment verification after selecting the active key. To generate the HTML security report manually:
+
+```bash
+generate-report
+python3 main.py report
+```
+
+The report is written to `logs/security_report.html`.
+
 ## Requirements
 
 - macOS
