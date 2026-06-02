@@ -13,6 +13,7 @@ import argparse
 import browser_cookie3
 import subprocess
 import time
+from urllib.parse import unquote
 from .logger import log_success, log_warning, log_error, log_info, log_start, log_end
 from .utils import Colors, colored_print, load_config, get_browser_info
 from .portkey_api import list_api_keys
@@ -25,7 +26,7 @@ def extract_bearer_token_from_cookies(cookies):
     for cookie_name in TOKEN_COOKIE_CANDIDATES:
         cookie_data = cookies.get(cookie_name)
         if cookie_data and cookie_data.get("value"):
-            value = cookie_data["value"]
+            value = unquote(cookie_data["value"]).strip()
             if value.lower().startswith("bearer "):
                 value = value.split(None, 1)[1]
             return value, cookie_name
