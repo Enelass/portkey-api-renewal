@@ -37,6 +37,14 @@ SECURITY_REPORT_NAME = "security_report.html"
 KEYCHAIN_SERVICE_NAME = "PORTKEY_API_KEY"
 CONFIG_ENV_VAR = "PORTKEY_KEY_UPDATER_CONFIG"
 LEGACY_CONFIG_ENV_VAR = "LITELLM_KEY_UPDATER_CONFIG"
+COOKIE_EXTRACTABLE_BROWSER_IDS = {
+    "com.microsoft.edgemac",
+    "com.google.chrome",
+    "com.brave.Browser",
+    "com.brave.browser",
+    "org.mozilla.firefox",
+}
+COOKIE_EXTRACTABLE_BROWSER_NAMES = "Chrome, Edge, Firefox, or Brave"
 
 # ============================================================================
 # COLOR UTILITIES

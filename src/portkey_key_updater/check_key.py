@@ -12,6 +12,8 @@ from .logger import log_end, log_error, log_info, log_start, log_success
 from .portkey_api import describe_key, list_api_keys, select_latest_active_key
 from .renew_key import copy_to_clipboard, request_api_key_with_token
 from .utils import (
+    COOKIE_EXTRACTABLE_BROWSER_IDS,
+    COOKIE_EXTRACTABLE_BROWSER_NAMES,
     Colors,
     build_subprocess_env,
     colored_print,
@@ -78,16 +80,47 @@ def handle_expired_jwt(config):
         open_browser(base_url)
         colored_print("[AUTH] Your Portkey browser session token has expired.", Colors.YELLOW)
         colored_print(
-            "[AUTH] I opened the Portkey sign-in page. Please authenticate in the browser, wait about 30 seconds for cookies to refresh, then run this command again.",
+            "[AUTH] I opened the Portkey sign-in page. Please authenticate in the browser, wait about 20 seconds for cookies to refresh, then run this command again.",
             Colors.YELLOW,
         )
     except Exception as exc:
         colored_print("[AUTH] Your Portkey browser session token has expired.", Colors.YELLOW)
         colored_print(
-            f"[AUTH] Please open {base_url}, authenticate, wait about 30 seconds for cookies to refresh, then run this command again.",
+            f"[AUTH] Please open {base_url}, authenticate, wait about 20 seconds for cookies to refresh, then run this command again.",
             Colors.YELLOW,
         )
         log_error(f"Could not open browser for expired JWT re-authentication: {exc}")
+
+
+def handle_missing_browser_session(config, browser_info):
+    """Open Portkey for supported browsers and explain how to create cookies."""
+    base_url = config["oauth"]["base_url"]
+    browser_id = browser_info.get("bundle_id")
+    browser_name = browser_info.get("name", "your default browser")
+
+    if browser_id not in COOKIE_EXTRACTABLE_BROWSER_IDS:
+        colored_print(
+            f"[INFO] {browser_name} is not supported for automated cookie extraction.",
+            Colors.YELLOW,
+        )
+        colored_print(
+            f"[INFO] Please set your default browser to {COOKIE_EXTRACTABLE_BROWSER_NAMES}, sign in to Portkey, then run this command again.",
+            Colors.YELLOW,
+        )
+        return
+
+    try:
+        open_browser(base_url)
+        colored_print(
+            f"[AUTH] I opened Portkey in {browser_name}. Please log in, wait about 20 seconds for cookies to refresh, then run this command again.",
+            Colors.YELLOW,
+        )
+    except Exception as exc:
+        colored_print(
+            f"[AUTH] Please open {base_url} in {browser_name}, log in, wait about 20 seconds for cookies to refresh, then run this command again.",
+            Colors.YELLOW,
+        )
+        log_error(f"Could not open browser for missing Portkey browser session: {exc}")
 
 
 def check_current_api_key(final_token, cookies, return_key=False):
@@ -171,7 +204,7 @@ def _extract_session_token_and_cookies(config):
     if not cookies:
         colored_print("[ERROR] No cookies found in browser session", Colors.RED)
         log_error("No cookies found in browser session")
-        colored_print("[INFO] Please make sure you're logged in to Portkey in your browser", Colors.YELLOW)
+        handle_missing_browser_session(config, browser_info)
         sys.exit(1)
 
     colored_print(f"[INFO] Found cookies: {', '.join(sorted(cookies))}", Colors.CYAN)
